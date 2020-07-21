@@ -5,8 +5,10 @@
   "repository": "https://github.com/yalozairi/EunoiaAPI.git",
   "license": "MIT",
   "dependencies": {
+    "body-parser": "^1.19.0",
     "cors": "^2.8.5",
-    "express": "^4.17.1"
+    "express": "^4.17.1",
+    "slugify": "^1.4.4"
   },
   "scripts": {
     "start": "nodemon app.js"

@@ -4,7 +4,6 @@ const notebooks = [
     name: "Seasonal Notebooks",
     slug: "seasonal-notebooks",
     img: "https://i.imgur.com/b1GOq1N.png",
-    alt: "Notebook Pile",
     description: "This is a pile of notebooks",
     price: 25,
   },
@@ -14,7 +13,6 @@ const notebooks = [
     slug: "pink-spiral-notebook",
     img:
       "https://cdn.shopify.com/s/files/1/0831/9463/products/Notebooks_Notebook_Blossom-Pink_1200x1200.png?v=1571438791",
-    alt: "Pink Spiral Notebook",
     description: "This is a pink spiral notebook, perfect for you!",
     price: 15,
   },
@@ -23,7 +21,6 @@ const notebooks = [
     name: "Lifestyle Notebook",
     slug: "lifestyle-notebook",
     img: "https://i.imgur.com/R81jHmR.png",
-    alt: "Lifestyle Notebook",
     description:
       "This is our classic lifestyle notebook, one to keep throughout your daily life!",
     price: 10,
