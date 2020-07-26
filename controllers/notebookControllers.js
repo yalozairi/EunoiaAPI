@@ -1,48 +1,55 @@
-//data
-let notebooks = require("../notebooks");
+const { Notebook } = require("../db/models");
 
-const slugify = require("slugify");
-let idCounter = notebooks.length + 1;
-
-exports.notebookCreate = (req, res) => {
-  const id = idCounter;
-  idCounter++;
-  const slug = slugify(req.body.name, { lower: true });
-
-  const newNotebook = { id, slug, ...req.body };
-  notebooks.push(newNotebook);
-
-  res.status(201).json(newNotebook);
-};
-
-exports.notebookList = (req, res) => {
-  res.json(notebooks);
-};
-
-exports.notebookUpdate = (req, res) => {
-  const { notebookId } = req.params;
-  const foundNotebook = notebooks.find(
-    (notebook) => notebook.id === +notebookId
-  );
-  if (foundNotebook) {
-    for (const key in req.body) foundNotebook[key] = req.body[key];
-    res.status(204).end();
-  } else {
-    res.status(404).json({ message: "Notebook not found" });
+exports.notebookList = async (req, res, next) => {
+  try {
+    const _notebooks = await Notebook.findAll({
+      attributes: { exclude: ["createdAt", "updatedAt"] },
+    });
+    res.json(_notebooks);
+  } catch (error) {
+    next(error);
   }
 };
 
-exports.notebookDelete = (req, res) => {
-  const { notebookId } = req.params;
-  const foundNotebook = notebooks.find(
-    (notebook) => notebook.id === +notebookId
-  );
-  if (foundNotebook) {
-    notebooks = notebooks.filter(
-      (notebook) => notebook.id !== +foundNotebook.id
-    );
-    res.status(204).end();
-  } else {
-    res.status(404).json({ message: "Notebook not found" });
+exports.notebookCreate = async (req, res, next) => {
+  try {
+    const newNotebook = await Notebook.crate(req.body);
+    res.status(201).json(newNotebook);
+  } catch (error) {
+    next(error);
+  }
+};
+
+exports.notebookUpdate = async (req, res, next) => {
+  try {
+    const { notebookId } = req.params;
+    const foundNotebook = await Notebook.findByPk(notebookId);
+    if (foundNotebook) {
+      await foundNotebook.update(req.body);
+      res.status(204).end();
+    } else {
+      const err = new Error("Notebook Not Found");
+      err.status = 404;
+      next(err);
+    }
+  } catch (error) {
+    next(error);
+  }
+};
+
+exports.notebookDelete = async (req, res, next) => {
+  try {
+    const { notebookId } = req.params;
+    const foundNotebook = await Notebook.findByPk(notebookId);
+    if (foundNotebook) {
+      await foundNotebook.destroy();
+      res.status(204).end();
+    } else {
+      const err = new Error("Notebook Not Found");
+      err.status = 404;
+      next(err);
+    }
+  } catch (error) {
+    next(error);
   }
 };

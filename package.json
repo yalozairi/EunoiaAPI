@@ -1,14 +1,17 @@
 {
   "name": "EunoiaAPI",
   "version": "1.0.0",
-  "main": "index.js",
+  "main": "app.js",
   "repository": "https://github.com/yalozairi/EunoiaAPI.git",
   "license": "MIT",
   "dependencies": {
     "body-parser": "^1.19.0",
     "cors": "^2.8.5",
     "express": "^4.17.1",
-    "slugify": "^1.4.4"
+    "pg": "^8.3.0",
+    "pg-hstore": "^2.3.3",
+    "sequelize": "^6.3.3",
+    "sequelize-slugify": "^0.9.1"
   },
   "scripts": {
     "start": "nodemon app.js"

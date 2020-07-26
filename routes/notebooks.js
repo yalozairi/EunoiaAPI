@@ -11,7 +11,11 @@ const {
 const router = express.Router();
 
 //List
-router.get("", notebookList);
+router.get("/", notebookList);
+
+router.use((req, res, next) => {
+  next();
+});
 
 //Notebook Create
 router.post("/", notebookCreate);
