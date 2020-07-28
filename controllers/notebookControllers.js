@@ -1,5 +1,5 @@
 //Data
-const { Notebook } = require("../db/models");
+const { Notebook, Vendor } = require("../db/models");
 
 exports.fetchNotebook = async (notebookId, next) => {
   try {
@@ -13,7 +13,12 @@ exports.fetchNotebook = async (notebookId, next) => {
 exports.notebookList = async (req, res, next) => {
   try {
     const _notebooks = await Notebook.findAll({
-      attributes: { exclude: ["createdAt", "updatedAt"] },
+      attributes: { exclude: ["vendorId", "createdAt", "updatedAt"] },
+      include: {
+        model: Vendor,
+        as: "vendor",
+        attributes: ["name"],
+      },
     });
     res.json(_notebooks);
   } catch (error) {
@@ -21,17 +26,14 @@ exports.notebookList = async (req, res, next) => {
   }
 };
 
-exports.notebookCreate = async (req, res, next) => {
-  try {
-    const newNotebook = await Notebook.create(req.body);
-    res.status(201).json(newNotebook);
-  } catch (error) {
-    next(error);
-  }
-};
-
 exports.notebookUpdate = async (req, res, next) => {
   try {
+    if (req.file) {
+      req.body.image = `${req.protocol}://${req.get("host")}/media/${
+        req.file.filename
+      }`;
+    }
+
     await req.notebook.update(req.body);
     res.status(204).end();
   } catch (error) {

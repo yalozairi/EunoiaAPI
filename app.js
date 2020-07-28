@@ -2,24 +2,25 @@
 const express = require("express");
 const cors = require("cors");
 const bodyParser = require("body-parser");
+const path = require("path");
 
 //DB
 const db = require("./db");
 
 //Routes
 const notebookRoutes = require("./routes/notebooks");
+const vendorRoutes = require("./routes/vendors");
 
 const app = express();
 
 app.use(cors());
 app.use(bodyParser.json());
 
-app.use((req, res, next) => {
-  next();
-});
-
 //Routers
 app.use("/notebooks", notebookRoutes);
+app.use("/vendors", vendorRoutes);
+
+app.use("/media", express.static(path.join(__dirname, "media")));
 
 app.use((req, res, next) => {
   res.status(404).json("Path not Found");
@@ -34,7 +35,10 @@ app.use((err, req, res, next) => {
 
 const run = async () => {
   try {
-    await db.sync({ alter: true });
+    await db.sync({
+      alter: true,
+      /* alter: true force: true */
+    });
   } catch (error) {
     console.error("run -> error", error);
   }

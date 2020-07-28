@@ -1,5 +1,4 @@
 const { DataTypes, Model } = require("sequelize");
-const SequelizeSlugify = require("sequelize-slugify");
 const db = require("../db");
 const sequelizeSlugify = require("sequelize-slugify/lib/sequelize-slugify");
 
@@ -8,7 +7,7 @@ class Notebook extends Model {}
 Notebook.init(
   {
     name: { type: DataTypes.STRING, allowNull: false },
-    img: { type: DataTypes.STRING, allowNull: false },
+    image: { type: DataTypes.STRING /*allowNull: false*/ },
     description: { type: DataTypes.STRING, allowNull: false },
     price: {
       type: DataTypes.INTEGER,

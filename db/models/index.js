@@ -1,3 +1,12 @@
 const Notebook = require("./Notebook");
+const Vendor = require("./Vendor");
 
-module.exports = { Notebook };
+Vendor.hasMany(Notebook, {
+  as: "notebooks",
+  foreignKey: "vendorId",
+  allowNull: false,
+});
+
+Notebook.belongsTo(Vendor, { as: "vendor" });
+
+module.exports = { Notebook, Vendor };
