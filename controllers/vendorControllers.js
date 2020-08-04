@@ -28,17 +28,17 @@ exports.notebookCreate = async (req, res, next) => {
 
 exports.vendorList = async (req, res, next) => {
   try {
-    const _vendors = await Vendor.findAll({
+    const vendors = await Vendor.findAll({
       attributes: { exclude: ["createdAt", "updatedAt"] },
       include: [
         {
           model: Notebook,
           as: "notebooks",
-          attributes: { exclude: ["createdAt", "updatedAt" /*, "vendorId"*/] },
+          attributes: ["id"],
         },
       ],
     });
-    res.json(_vendors);
+    res.json(vendors);
   } catch (error) {
     next(error);
   }
@@ -52,6 +52,7 @@ exports.vendorCreate = async (req, res, next) => {
       }`;
     }
     const newVendor = await Vendor.create(req.body);
+    // newVendor.notebooks = [];
     res.status(201).json(newVendor);
   } catch (error) {
     next(error);
