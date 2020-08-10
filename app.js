@@ -3,6 +3,10 @@ const express = require("express");
 const cors = require("cors");
 const bodyParser = require("body-parser");
 const path = require("path");
+const passport = require("passport")
+
+// Passport Strategies
+const { localStrategy } = require("./middleware/passport");
 
 //DB
 const db = require("./db");
@@ -10,15 +14,21 @@ const db = require("./db");
 //Routes
 const notebookRoutes = require("./routes/notebooks");
 const vendorRoutes = require("./routes/vendors");
+const userRoutes = require("./routes/users")
 
 const app = express();
 
 app.use(cors());
 app.use(bodyParser.json());
 
+// Passport Setup
+app.use(passport.initialize())
+passport.use(localStrategy)
+
 //Routers
 app.use("/notebooks", notebookRoutes);
 app.use("/vendors", vendorRoutes);
+app.use(userRoutes)
 
 app.use("/media", express.static(path.join(__dirname, "media")));
 
@@ -36,11 +46,12 @@ app.use((err, req, res, next) => {
 const run = async () => {
   try {
     await db.sync({
-      alter: true,
+      // alter: true,
       /* alter: true force: true */
     });
   } catch (error) {
     console.error("run -> error", error);
+    //next(error) ?
   }
   app.listen(8000, () =>
     console.log("The application is running on localhost:8000")

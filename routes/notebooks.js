@@ -3,7 +3,6 @@ const upload = require("../middleware/multer");
 
 //Controllers
 const {
-  notebookCreate,
   notebookList,
   notebookUpdate,
   notebookDelete,
