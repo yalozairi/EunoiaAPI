@@ -8,10 +8,7 @@ User.init(
     username: {
       type: DataTypes.STRING,
       allowNull: false,
-      unique: {
-        args: true,
-        msg: "Username already exists",
-     },
+        unique: true,
     },
     password: {
       type: DataTypes.STRING,
@@ -23,8 +20,12 @@ User.init(
         unique: {
             args: true,
             msg: "Username already exists",
-         },
-         isEmail: true,
+        },
+        validate: {
+        isEmail: {
+            args: true,
+            msg: "Email not Recognized",
+         },   },
       },
       fullName: {
         type: DataTypes.STRING,
@@ -33,7 +34,7 @@ User.init(
   },
   {
     sequelize: db,
-  },
+  }
 );
 
 module.exports = User;

@@ -46,12 +46,11 @@ app.use((err, req, res, next) => {
 const run = async () => {
   try {
     await db.sync({
-      // alter: true,
+      alter: true,
       /* alter: true force: true */
     });
   } catch (error) {
     console.error("run -> error", error);
-    //next(error) ?
   }
   app.listen(8000, () =>
     console.log("The application is running on localhost:8000")
