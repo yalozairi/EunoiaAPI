@@ -8,29 +8,34 @@ User.init(
     username: {
       type: DataTypes.STRING,
       allowNull: false,
-        unique: true,
+      unique: true,
     },
     password: {
       type: DataTypes.STRING,
       allowNull: false,
     },
     email: {
-        type: DataTypes.STRING,
-        allowNull: false,
-        unique: {
-            args: true,
-            msg: "Username already exists",
-        },
-        validate: {
+      type: DataTypes.STRING,
+      allowNull: false,
+      unique: {
+        args: true,
+        msg: "Username already exists",
+      },
+      validate: {
         isEmail: {
-            args: true,
-            msg: "Email not Recognized",
-         },   },
+          args: true,
+          msg: "Email not Recognized",
+        },
       },
-      fullName: {
-        type: DataTypes.STRING,
-        allowNull: true,
-      },
+    },
+    fullName: {
+      type: DataTypes.STRING,
+      allowNull: true,
+    },
+    role: {
+      type: DataTypes.STRING,
+      defaultValue: "customer",
+    },
   },
   {
     sequelize: db,
