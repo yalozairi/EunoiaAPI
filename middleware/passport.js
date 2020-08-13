@@ -31,7 +31,7 @@ exports.jwtStrategy = new JWTStrategy(
   },
 
   async (jwtPayload, done) => {
-    if (Date.now() > jwtPayload.expires) {
+    if (Date.now() > jwtPayload.exp) {
       return done(null, false);
     }
     try {
