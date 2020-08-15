@@ -22,7 +22,7 @@ User.init(
       allowNull: false,
       unique: {
         args: true,
-        msg: "Email already exists",
+        msg: "Email is already registered",
       },
       validate: {
         isEmail: {
@@ -38,6 +38,13 @@ User.init(
     role: {
       type: DataTypes.STRING,
       defaultValue: "customer",
+      allowNull: false,
+      validate: {
+        isIn: {
+          args: [["customer", "vendor", "admin"]],
+          msg: "Role does not exist",
+        },
+      },
     },
   },
   {
