@@ -2,7 +2,7 @@ const { Sequelize } = require("sequelize");
 const { sequelize } = require("./models/User");
 
 const db = process.env.DATABASE_URL
-  ? new sequelize(process.env.DATABASE_URL, {
+  ? new Sequelize(process.env.DATABASE_URL, {
       dialect: "postgres",
       logging: false,
     })
