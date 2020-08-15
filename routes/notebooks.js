@@ -1,5 +1,6 @@
 const express = require("express");
 const upload = require("../middleware/multer");
+const passport = require("passport");
 
 //Controllers
 const {
@@ -31,9 +32,18 @@ router.use((req, res, next) => {
 });
 
 //Notebook Delete
-router.delete("/:notebookId", notebookDelete);
+router.delete(
+  "/:notebookId",
+  passport.authenticate("jwt", { session: false }),
+  notebookDelete
+);
 
 //Notebook Update
-router.put("/:notebookId", upload.single("image"), notebookUpdate);
+router.put(
+  "/:notebookId",
+  passport.authenticate("jwt", { session: false }),
+  upload.single("image"),
+  notebookUpdate
+);
 
 module.exports = router;

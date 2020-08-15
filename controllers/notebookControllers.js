@@ -3,7 +3,13 @@ const { Notebook, Vendor } = require("../db/models");
 
 exports.fetchNotebook = async (notebookId, next) => {
   try {
-    notebook = await Notebook.findByPk(notebookId);
+    notebook = await Notebook.findByPk(notebookId, {
+      include: {
+        model: Vendor,
+        as: "vendor",
+        attributes: ["userId"],
+      },
+    });
     return notebook;
   } catch (error) {
     next(error);
@@ -28,14 +34,19 @@ exports.notebookList = async (req, res, next) => {
 
 exports.notebookUpdate = async (req, res, next) => {
   try {
-    if (req.file) {
-      req.body.image = `${req.protocol}://${req.get("host")}/media/${
-        req.file.filename
-      }`;
+    if (req.user.id === req.notebook.vendor.userId) {
+      if (req.file) {
+        req.body.image = `${req.protocol}://${req.get("host")}/media/${
+          req.file.filename
+        }`;
+      }
+      await req.notebook.update(req.body);
+      res.status(204).end();
+    } else {
+      const err = new Error("Unauthorized");
+      err.status = 404;
+      next(err);
     }
-
-    await req.notebook.update(req.body);
-    res.status(204).end();
   } catch (error) {
     next(error);
   }
@@ -43,8 +54,14 @@ exports.notebookUpdate = async (req, res, next) => {
 
 exports.notebookDelete = async (req, res, next) => {
   try {
-    await req.notebook.destroy();
-    res.status(204).end();
+    if (req.user.id === req.notebook.vendor.userId) {
+      await req.notebook.destroy();
+      res.status(204).end();
+    } else {
+      const err = new Error("Unauthorized");
+      err.status = 404;
+      next(err);
+    }
   } catch (error) {
     next(error);
   }

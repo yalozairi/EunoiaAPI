@@ -34,7 +34,12 @@ router.use((req, res, next) => {
 });
 
 //Notebook Create
-router.post("/:vendorId/notebooks", upload.single("image"), notebookCreate);
+router.post(
+  "/:vendorId/notebooks",
+  passport.authenticate("jwt", { session: false }),
+  upload.single("image"),
+  notebookCreate
+);
 
 //Vendor Create
 router.post(
@@ -45,9 +50,18 @@ router.post(
 );
 
 //Vendor Delete
-router.delete("/:vendorId", vendorDelete);
+router.delete(
+  "/:vendorId",
+  passport.authenticate("jwt", { session: false }),
+  vendorDelete
+);
 
 //Vendor Update
-router.put("/:vendorId", upload.single("image"), vendorUpdate);
+router.put(
+  "/:vendorId",
+  passport.authenticate("jwt", { session: false }),
+  upload.single("image"),
+  vendorUpdate
+);
 
 module.exports = router;
