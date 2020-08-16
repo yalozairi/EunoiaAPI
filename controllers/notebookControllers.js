@@ -36,9 +36,9 @@ exports.notebookUpdate = async (req, res, next) => {
   try {
     if (req.user.id === req.notebook.vendor.userId) {
       if (req.file) {
-        req.body.image = `${req.protocol}://${req.get("host")}/media/${
-          req.file.filename
-        }`;
+        req.body.image = `${process.env.PORT ? "https" : "http"}://${req.get(
+          "host"
+        )}/media/${req.file.filename}`;
       }
       await req.notebook.update(req.body);
       res.status(204).end();
